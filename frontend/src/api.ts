@@ -34,6 +34,14 @@ export const papers = {
     api.post('/papers/import', { ...paper, workspace_id }),
   getByWorkspace: (workspace_id: number) =>
     api.get(`/papers/workspace/${workspace_id}`),
+  upload: (file: File, workspace_id: number) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('workspace_id', workspace_id.toString());
+    return api.post('/papers/upload', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
 };
 
 export const chat = {

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from typing import List
@@ -152,3 +152,64 @@ def get_workspace_papers(workspace_id: int, db: Session = Depends(get_db), curre
         raise HTTPException(status_code=404, detail="Workspace not found")
     
     return workspace.papers
+
+@router.post("/upload", response_model=PaperResponse)
+async def upload_pdf(
+    file: UploadFile = File(...),
+    workspace_id: int = Form(...),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Upload a PDF file and extract its content"""
+    
+    # Verify workspace belongs to user
+    workspace = db.query(Workspace).filter(
+        Workspace.id == workspace_id, 
+        Workspace.user_id == current_user.id
+    ).first()
+    if not workspace:
+        raise HTTPException(status_code=404, detail="Workspace not found")
+    
+    # Check if file is PDF
+    if not file.filename.endswith('.pdf'):
+        raise HTTPException(status_code=400, detail="Only PDF files are allowed")
+    
+    try:
+        # Read PDF content
+        pdf_content = await file.read()
+        pdf_file = io.BytesIO(pdf_content)
+        pdf_reader = PyPDF2.PdfReader(pdf_file)
+        
+        # Extract text from all pages
+        full_text = ""
+        max_pages = min(len(pdf_reader.pages), 50)  # Limit to 50 pages
+        for page_num in range(max_pages):
+            page = pdf_reader.pages[page_num]
+            full_text += page.extract_text() + "\n"
+        
+        # Extract title from filename (remove .pdf extension)
+        title = file.filename.rsplit('.', 1)[0]
+        
+        # Create abstract from first 500 characters
+        abstract = full_text[:500].strip() + "..." if len(full_text) > 500 else full_text.strip()
+        
+        # Create paper entry
+        new_paper = Paper(
+            title=title,
+            authors="Uploaded by user",
+            abstract=abstract,
+            full_text=full_text.strip(),
+            date="",
+            url="",
+            workspace_id=workspace_id
+        )
+        
+        db.add(new_paper)
+        db.commit()
+        db.refresh(new_paper)
+        
+        return new_paper
+        
+    except Exception as e:
+        print(f"Error processing PDF: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to process PDF: {str(e)}")

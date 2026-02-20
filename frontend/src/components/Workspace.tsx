@@ -12,6 +12,8 @@ const Workspace: React.FC<WorkspaceProps> = ({ onSelectWorkspace }) => {
   const [newWorkspaceName, setNewWorkspaceName] = useState('');
   const [selectedPaper, setSelectedPaper] = useState<any | null>(null);
   const [showPaperModal, setShowPaperModal] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     loadWorkspaces();
@@ -65,6 +67,39 @@ const Workspace: React.FC<WorkspaceProps> = ({ onSelectWorkspace }) => {
   const closePaperModal = () => {
     setShowPaperModal(false);
     setSelectedPaper(null);
+  };
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file || !selectedId) return;
+
+    if (!file.name.endsWith('.pdf')) {
+      alert('Please upload a PDF file');
+      return;
+    }
+
+    setUploading(true);
+    try {
+      await papers.upload(file, selectedId);
+      alert('PDF uploaded successfully!');
+      loadPapers(selectedId);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    } catch (err: any) {
+      console.error('Failed to upload PDF', err);
+      alert(err.response?.data?.detail || 'Failed to upload PDF. Please try again.');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const triggerFileUpload = () => {
+    if (!selectedId) {
+      alert('Please select a workspace first');
+      return;
+    }
+    fileInputRef.current?.click();
   };
 
   return (
@@ -127,14 +162,41 @@ const Workspace: React.FC<WorkspaceProps> = ({ onSelectWorkspace }) => {
       {/* Papers Section */}
       {selectedId && (
         <div className="bg-white rounded-2xl shadow-lg p-6">
-          <h3 className="text-2xl font-bold text-gray-800 mb-6">Papers in Workspace</h3>
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-2xl font-bold text-gray-800">Papers in Workspace</h3>
+            <div className="flex gap-3">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".pdf"
+                onChange={handleFileUpload}
+                className="hidden"
+              />
+              <button
+                onClick={triggerFileUpload}
+                disabled={uploading}
+                className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-xl hover:from-purple-600 hover:to-pink-700 transition-all font-semibold shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                </svg>
+                {uploading ? 'Uploading...' : 'Upload PDF'}
+              </button>
+            </div>
+          </div>
           {workspacePapers.length === 0 ? (
             <div className="text-center py-12 text-gray-500">
               <svg className="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
               <p className="text-lg font-medium">No papers yet</p>
-              <p className="text-sm">Go to Search Papers to add some!</p>
+              <p className="text-sm mb-4">Search papers from arXiv or upload your own PDFs!</p>
+              <button
+                onClick={triggerFileUpload}
+                className="px-6 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors font-medium"
+              >
+                Upload Your First PDF
+              </button>
             </div>
           ) : (
             <div className="space-y-4">
