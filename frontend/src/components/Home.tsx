@@ -176,11 +176,11 @@ const Home: React.FC<HomeProps> = ({ isAuthenticated, onLogout }) => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <header className="mb-12">
                <span className="inline-block px-4 py-1.5 bg-primary/10 border border-primary/20 rounded-full text-[10px] font-label font-bold text-primary uppercase tracking-[0.3em] mb-8">Next-Gen Cognitive Architecture</span>
-               <h1 className="text-5xl md:text-7xl lg:text-8xl font-black font-headline leading-[1.1] tracking-tighter text-on-surface mb-4 uppercase h-[3.8em] md:h-[3.2em] overflow-visible flex flex-wrap items-start content-start">
+               <h1 className="text-5xl md:text-7xl lg:text-8xl font-black font-headline leading-[1.1] tracking-tighter text-on-surface mb-6 uppercase min-h-[3.8em] md:min-h-[3.2em] flex flex-wrap items-start content-start">
                  {renderTitle()}
-                 <span className="w-1 md:w-2 h-[0.8em] bg-primary inline-block animate-pulse ml-2 align-middle"></span>
+                 <span className="w-1 md:w-2 h-[0.8em] bg-primary inline-block animate-pulse ml-2 self-center"></span>
                </h1>
-               <p className="text-lg md:text-xl font-body text-on-surface-variant max-w-2xl leading-relaxed mb-12 h-[3.5em] md:h-[2.5em] overflow-hidden">
+               <p className="text-lg md:text-xl font-body text-on-surface-variant max-w-2xl leading-relaxed mb-12 min-h-[3.5em] md:min-h-[2.5em]">
                  {slides[currentSlide].subtitle.substring(0, subtitleProgress)}
                </p>
                <div className="flex flex-col sm:flex-row gap-6">
