@@ -41,10 +41,11 @@ def chat(request: ChatRequest, db: Session = Depends(get_db), current_user: User
     relevant_papers = []
     for paper in papers:
         # Use full_text if available, otherwise fall back to abstract
-        paper_content = paper.full_text if paper.full_text else paper.abstract
-        paper_embedding = generate_embedding(paper_content[:1000])  # Use first 1000 chars for embedding
+        # Add safety check for None values
+        content = paper.full_text if paper.full_text else (paper.abstract if paper.abstract else "")
+        paper_embedding = generate_embedding(content[:1000])  # Use first 1000 chars for embedding
         similarity = cosine_similarity(query_embedding, paper_embedding)
-        print(f"Similarity for '{paper.title[:50]}...': {similarity:.3f}")
+        print(f"Similarity for '{paper.title[:50] if paper.title else 'Untitled'}...': {similarity:.3f}")
         if similarity > 0.2:  # Lower threshold for better results
             relevant_papers.append((paper, similarity))
     
@@ -61,12 +62,15 @@ def chat(request: ChatRequest, db: Session = Depends(get_db), current_user: User
     context_parts = []
     for i, (paper, sim) in enumerate(relevant_papers[:3]):  # Top 3 papers
         # Use full_text if available, otherwise use abstract
-        if paper.full_text and len(paper.full_text) > 100:
+        full_text = paper.full_text if paper.full_text else ""
+        abstract = paper.abstract if paper.abstract else ""
+        
+        if len(full_text) > 100:
             # Use first 3000 characters of full text to stay within token limits
-            content = paper.full_text[:3000]
+            content = full_text[:3000]
             context_parts.append(f"Paper {i+1}:\nTitle: {paper.title}\nAuthors: {paper.authors}\nContent: {content}...")
         else:
-            context_parts.append(f"Paper {i+1}:\nTitle: {paper.title}\nAuthors: {paper.authors}\nAbstract: {paper.abstract}")
+            context_parts.append(f"Paper {i+1}:\nTitle: {paper.title}\nAuthors: {paper.authors}\nAbstract: {abstract}")
     
     context = "\n\n".join(context_parts)
     

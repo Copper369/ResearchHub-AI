@@ -103,68 +103,76 @@ const Workspace: React.FC<WorkspaceProps> = ({ onSelectWorkspace }) => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto">
-      {/* Header Section */}
-      <div className="mb-8">
-        <h2 className="text-3xl font-bold text-gray-800 mb-2">My Workspaces</h2>
-        <p className="text-gray-600">Organize your research papers into different projects</p>
-      </div>
+    <div className="max-w-5xl mx-auto">
+      <header className="mb-12">
+        <h2 className="text-5xl font-black font-headline tracking-tighter mb-4 text-on-surface uppercase">Neural Repositories</h2>
+        <div className="flex gap-4">
+          <div className="h-1 w-24 bg-tertiary rounded-full shadow-[0_0_12px_rgba(193,128,255,0.5)]"></div>
+          <div className="h-1 w-12 bg-surface-container-highest rounded-full"></div>
+        </div>
+      </header>
 
       {/* Create Workspace Card */}
-      <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Create New Workspace</h3>
-        <div className="flex gap-3">
+      <div className="bg-surface-container-low/40 border border-outline-variant/10 rounded-3xl p-8 mb-12 backdrop-blur-sm">
+        <h3 className="font-label text-xs uppercase tracking-[0.2em] text-on-surface-variant font-bold mb-6">Initialize New Repository</h3>
+        <div className="flex flex-col md:flex-row gap-4">
           <input
             type="text"
-            placeholder="Enter workspace name (e.g., 'Machine Learning Research')"
+            placeholder="Enter workspace name (e.g., 'Quantum Neural Search')"
             value={newWorkspaceName}
             onChange={(e) => setNewWorkspaceName(e.target.value)}
-            className="flex-1 p-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+            className="flex-1 bg-surface-container-highest border border-outline-variant/30 rounded-2xl py-4 px-6 text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none focus:ring-2 focus:ring-tertiary/50 focus:border-tertiary transition-all font-body"
           />
           <button
             onClick={createWorkspace}
-            className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-teal-600 text-white rounded-xl hover:from-cyan-600 hover:to-teal-700 transition-all font-semibold shadow-md"
+            className="bg-gradient-to-r from-tertiary to-tertiary-dim text-on-tertiary-fixed font-black font-headline tracking-tighter px-10 py-4 rounded-2xl shadow-xl shadow-tertiary-dim/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
           >
-            Create
+            CREATE REPOSITORY
           </button>
         </div>
       </div>
 
-      {/* Workspaces Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
         {workspaceList.map((ws) => (
           <div
             key={ws.id}
             onClick={() => selectWorkspace(ws.id)}
-            className={`p-6 rounded-2xl cursor-pointer transition-all transform hover:scale-105 ${
+            className={`group p-8 rounded-3xl cursor-pointer transition-all transform hover:scale-[1.02] border-2 relative overflow-hidden ${
               selectedId === ws.id
-                ? 'bg-gradient-to-br from-cyan-500 to-teal-600 text-white shadow-xl'
-                : 'bg-white hover:shadow-lg'
+                ? 'bg-gradient-to-br from-tertiary-dim to-tertiary border-tertiary shadow-xl shadow-tertiary/20'
+                : 'bg-surface-container-low border-outline-variant/10 hover:border-tertiary/30 hover:bg-surface-container-high'
             }`}
           >
-            <div className="flex items-center space-x-3 mb-3">
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                selectedId === ws.id ? 'bg-white bg-opacity-20' : 'bg-cyan-100'
-              }`}>
-                <svg className={`w-6 h-6 ${selectedId === ws.id ? 'text-white' : 'text-cyan-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-                </svg>
+            <div className="relative z-10">
+              <div className="flex items-center space-x-4 mb-6">
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center backdrop-blur-md ${
+                  selectedId === ws.id ? 'bg-black/10' : 'bg-tertiary/10 text-tertiary'
+                }`}>
+                  <span className={`material-symbols-outlined text-3xl ${selectedId === ws.id ? 'text-white' : 'text-tertiary'}`}>database</span>
+                </div>
+                <h3 className={`text-xl font-black font-headline tracking-tighter ${selectedId === ws.id ? 'text-white' : 'text-on-surface'}`}>{ws.name}</h3>
               </div>
-              <h3 className="text-xl font-bold">{ws.name}</h3>
+              <p className={`font-label text-xs uppercase tracking-widest ${selectedId === ws.id ? 'text-white/80' : 'text-on-surface-variant'}`}>
+                {selectedId === ws.id ? 'Currently Accessing' : 'Access Repository'}
+              </p>
             </div>
-            <p className={`text-sm ${selectedId === ws.id ? 'text-white text-opacity-90' : 'text-gray-500'}`}>
-              Click to view papers
-            </p>
+            {selectedId === ws.id && (
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-3xl -mr-10 -mt-10"></div>
+            )}
           </div>
         ))}
       </div>
 
-      {/* Papers Section */}
       {selectedId && (
-        <div className="bg-white rounded-2xl shadow-lg p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="text-2xl font-bold text-gray-800">Papers in Workspace</h3>
-            <div className="flex gap-3">
+        <section className="bg-surface-container-low/40 border border-outline-variant/10 rounded-3xl p-8 backdrop-blur-sm relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-tertiary/30 to-transparent"></div>
+          
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+            <div>
+              <h3 className="text-2xl font-black font-headline tracking-tighter text-on-surface">Repository Knowledge Nodes</h3>
+              <p className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant mt-1">Found {workspacePapers.length} synced papers</p>
+            </div>
+            <div className="flex items-center gap-3">
               <input
                 ref={fileInputRef}
                 type="file"
@@ -175,133 +183,148 @@ const Workspace: React.FC<WorkspaceProps> = ({ onSelectWorkspace }) => {
               <button
                 onClick={triggerFileUpload}
                 disabled={uploading}
-                className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-xl hover:from-purple-600 hover:to-pink-700 transition-all font-semibold shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                className="bg-primary/10 text-primary border border-primary/20 hover:bg-primary hover:text-on-primary px-6 py-3 rounded-xl font-label text-xs uppercase tracking-widest font-bold transition-all shadow-lg shadow-primary/10 flex items-center gap-2"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                </svg>
-                {uploading ? 'Uploading...' : 'Upload PDF'}
+                <span className="material-symbols-outlined">{uploading ? 'sync' : 'upload_file'}</span>
+                {uploading ? 'SYNCING...' : 'UPLOAD NEURAL PDF'}
               </button>
             </div>
           </div>
+
           {workspacePapers.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">
-              <svg className="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-              <p className="text-lg font-medium">No papers yet</p>
-              <p className="text-sm mb-4">Search papers from arXiv or upload your own PDFs!</p>
+            <div className="text-center py-20 bg-surface-container-high/20 rounded-3xl border border-dashed border-outline-variant/30">
+              <span className="material-symbols-outlined text-6xl mb-6 opacity-20">inventory_2</span>
+              <p className="text-lg font-bold font-headline tracking-tighter text-on-surface">Subspace is currently empty</p>
+              <p className="text-sm font-label uppercase tracking-widest text-on-surface-variant mt-2 mb-8">Import papers or upload datasets to begin</p>
               <button
                 onClick={triggerFileUpload}
-                className="px-6 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors font-medium"
+                className="bg-secondary/10 text-secondary border border-secondary/20 hover:bg-secondary hover:text-on-secondary px-8 py-3 rounded-xl font-label text-xs uppercase tracking-widest font-bold transition-all"
               >
-                Upload Your First PDF
+                INITIALIZE LOAD
               </button>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-0">
               {workspacePapers.map((paper) => (
-                <div key={paper.id} className="border-2 border-gray-100 p-5 rounded-xl hover:border-cyan-200 hover:shadow-md transition-all">
-                  <div className="flex justify-between items-start">
+                <div key={paper.id} className="relative pl-10 pb-8 group last:pb-0">
+                  <div className="absolute left-0 top-1.5 w-2 h-2 rounded-full bg-tertiary shadow-[0_0_12px_rgba(193,128,255,0.8)] group-hover:scale-125 transition-transform"></div>
+                  <div className="absolute left-[3px] top-4 w-[1px] h-full bg-outline-variant/30 group-last:bg-transparent"></div>
+
+                  <div className="flex flex-col md:flex-row justify-between items-center gap-6 p-6 rounded-2xl bg-surface-container-high/0 hover:bg-surface-container-high/40 border border-transparent hover:border-outline-variant/10 transition-all duration-300">
                     <div className="flex-1">
-                      <h4 className="font-bold text-lg text-gray-800 mb-2">{paper.title}</h4>
-                      <p className="text-sm text-gray-600 mb-1">
-                        <span className="font-semibold">Authors:</span> {paper.authors}
-                      </p>
-                      <p className="text-sm text-gray-500 mb-3">
-                        <span className="font-semibold">Date:</span> {paper.date}
-                      </p>
-                      <p className="text-sm text-gray-700 line-clamp-2">
-                        {paper.abstract?.substring(0, 150)}...
-                      </p>
+                      <h4 className="text-xl font-black font-headline leading-tight tracking-tighter text-on-surface group-hover:text-tertiary transition-colors mb-2">{paper.title}</h4>
+                      <div className="flex items-center gap-3">
+                        <span className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant">{paper.date}</span>
+                        <span className="h-1 w-1 rounded-full bg-outline-variant"></span>
+                        <span className="text-[10px] font-label uppercase tracking-widest text-secondary font-bold truncate max-w-[200px]">{paper.authors}</span>
+                      </div>
                     </div>
-                    <div className="flex flex-col gap-2 ml-4">
-                      <button
-                        onClick={() => openPaper(paper)}
-                        className="px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors text-sm font-medium whitespace-nowrap"
-                      >
-                        View Details
-                      </button>
+                    <div className="flex items-center gap-3">
                       <a
                         href={paper.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium text-center whitespace-nowrap"
+                        className="w-12 h-12 bg-surface-container-highest border border-outline-variant/20 rounded-xl flex items-center justify-center text-on-surface hover:text-tertiary transition-colors"
+                        title="View Source"
                       >
-                        Open arXiv
+                        <span className="material-symbols-outlined">open_in_new</span>
                       </a>
+                      <button
+                        onClick={() => openPaper(paper)}
+                        className="bg-tertiary/10 text-tertiary border border-tertiary/20 hover:bg-tertiary hover:text-on-tertiary px-6 py-3 rounded-xl font-label text-xs uppercase tracking-widest font-bold transition-all"
+                      >
+                        SYNTHESIZE DETAILS
+                      </button>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
           )}
-        </div>
+        </section>
       )}
 
-      {/* Paper Details Modal */}
+      {/* PAPER DETAIL SLIDE-IN PANEL */}
       {showPaperModal && selectedPaper && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex justify-between items-start">
-              <h3 className="text-2xl font-bold text-gray-800 pr-8">{selectedPaper.title}</h3>
-              <button
+        <aside className="fixed right-0 top-0 h-screen w-full md:w-[640px] glass-panel border-l border-outline-variant/20 shadow-2xl z-[100] flex flex-col overflow-hidden animate-in slide-in-from-right duration-500">
+          <div className="intelligence-pulse"></div>
+          
+          <div className="px-8 py-6 flex justify-between items-center bg-surface-container-low/40">
+            <div className="flex items-center gap-3">
+              <button 
                 onClick={closePaperModal}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container-highest text-on-surface-variant hover:text-on-surface transition-colors"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                <span className="material-symbols-outlined">close</span>
+              </button>
+              <span className="font-label text-xs uppercase tracking-widest text-on-surface-variant">Neural Analysis // {selectedPaper.id}</span>
+            </div>
+            <div className="flex items-center gap-4">
+              <button className="p-2 text-on-surface-variant hover:text-primary transition-colors">
+                <span className="material-symbols-outlined">bookmark</span>
+              </button>
+              <button className="p-2 text-on-surface-variant hover:text-primary transition-colors">
+                <span className="material-symbols-outlined">share</span>
               </button>
             </div>
-            
-            <div className="p-6 space-y-6">
-              <div>
-                <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">Authors</h4>
-                <p className="text-gray-800">{selectedPaper.authors}</p>
-              </div>
+          </div>
 
-              <div>
-                <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">Publication Date</h4>
-                <p className="text-gray-800">{selectedPaper.date}</p>
+          <div className="flex-1 overflow-y-auto custom-scrollbar px-8 pb-20">
+            <header className="py-12 border-b border-outline-variant/10">
+              <div className="flex items-center gap-2 mb-6">
+                <span className="px-2 py-1 bg-secondary/10 text-secondary text-[10px] font-bold font-label uppercase tracking-tighter rounded border border-secondary/20">Knowledge Node</span>
+                <span className="px-2 py-1 bg-tertiary/10 text-tertiary text-[10px] font-bold font-label uppercase tracking-tighter rounded border border-tertiary/20">Synthesized</span>
               </div>
+              <h1 className="text-4xl font-black font-headline leading-[1.1] tracking-tighter text-on-surface mb-6">
+                {selectedPaper.title}
+              </h1>
+              <div className="flex items-center gap-6">
+                <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+                  <span className="material-symbols-outlined text-3xl">psychology</span>
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-on-surface truncate max-w-[300px]">{selectedPaper.authors}</p>
+                  <p className="text-[10px] text-on-surface-variant font-label uppercase tracking-widest leading-none mt-1">{selectedPaper.date}</p>
+                </div>
+              </div>
+            </header>
 
-              <div>
-                <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">Abstract</h4>
-                <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{selectedPaper.abstract}</p>
-              </div>
+            <section className="py-12">
+              <h3 className="font-label text-xs uppercase tracking-[0.2em] text-primary-dim font-bold mb-8">Executive Extraction</h3>
+              <p className="text-on-surface-variant font-body leading-relaxed text-lg">
+                {selectedPaper.abstract}
+              </p>
+            </section>
 
-              <div>
-                <h4 className="text-sm font-semibold text-gray-500 uppercase mb-2">arXiv Link</h4>
-                <a
-                  href={selectedPaper.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-cyan-600 hover:text-cyan-700 underline break-all"
-                >
-                  {selectedPaper.url}
-                </a>
+            <section className="py-12 bg-surface-container-low/20 rounded-2xl p-8 border border-outline-variant/10 mb-8">
+              <h3 className="font-label text-xs uppercase tracking-[0.2em] text-on-surface-variant font-bold mb-6">Neural Origin</h3>
+              <div className="flex items-center gap-4">
+                <div className="p-4 rounded-2xl bg-surface-container-highest text-on-surface group truncate flex-1">
+                  <p className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant mb-1">Source URL</p>
+                  <a href={selectedPaper.url} target="_blank" rel="noopener noreferrer" className="text-secondary font-medium hover:underline text-sm truncate block">
+                    {selectedPaper.url}
+                  </a>
+                </div>
               </div>
+            </section>
+          </div>
 
-              <div className="flex gap-3 pt-4">
-                <a
-                  href={selectedPaper.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 px-6 py-3 bg-gradient-to-r from-cyan-500 to-teal-600 text-white rounded-xl hover:from-cyan-600 hover:to-teal-700 transition-all font-semibold text-center"
-                >
-                  Open Full Paper on arXiv
-                </a>
-                <button
-                  onClick={closePaperModal}
-                  className="px-6 py-3 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 transition-colors font-semibold"
-                >
-                  Close
-                </button>
-              </div>
+          <div className="p-6 bg-surface-container-low/80 backdrop-blur-md border-t border-outline-variant/10">
+            <div className="flex gap-4">
+              <a
+                href={selectedPaper.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 py-4 rounded-xl bg-gradient-to-r from-primary to-primary-dim text-on-primary font-black font-headline tracking-tighter text-center shadow-xl shadow-primary/10 hover:scale-[1.02] active:scale-[0.98] transition-transform"
+              >
+                OPEN SYNERGY SOURCE
+              </a>
+              <button className="w-14 h-14 rounded-xl bg-surface-container-highest border border-outline-variant/20 flex items-center justify-center text-on-surface hover:bg-surface-bright transition-colors">
+                <span className="material-symbols-outlined">download</span>
+              </button>
             </div>
           </div>
-        </div>
+        </aside>
       )}
     </div>
   );

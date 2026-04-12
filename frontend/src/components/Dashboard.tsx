@@ -58,93 +58,97 @@ const Dashboard: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto">
-      <div className="mb-8">
-        <h2 className="text-3xl font-bold text-gray-800 mb-2">Dashboard</h2>
-        <p className="text-gray-600">Overview of your research activity</p>
-      </div>
+    <div className="max-w-5xl mx-auto">
+      <header className="mb-12">
+        <h2 className="text-5xl font-black font-headline tracking-tighter mb-4 text-on-surface">Intelligence Dashboard</h2>
+        <div className="flex gap-4">
+          <div className="h-1 w-24 bg-primary-dim rounded-full shadow-[0_0_12px_rgba(100,94,251,0.5)]"></div>
+          <div className="h-1 w-12 bg-surface-container-highest rounded-full"></div>
+        </div>
+      </header>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-gradient-to-br from-cyan-500 to-teal-600 rounded-2xl p-6 text-white shadow-lg">
-          <div className="flex items-center justify-between">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <div className="bg-gradient-to-br from-primary-dim to-primary rounded-2xl p-6 text-on-primary-fixed shadow-xl shadow-primary-dim/10 relative overflow-hidden group">
+          <div className="absolute -right-4 -top-4 w-24 h-24 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+          <div className="relative z-10 flex items-center justify-between">
             <div>
-              <p className="text-white text-opacity-90 text-sm font-medium">Workspaces</p>
-              <p className="text-4xl font-bold mt-2">{stats.workspaces}</p>
+              <p className="font-label text-[10px] uppercase tracking-widest opacity-80">Workspaces</p>
+              <p className="text-5xl font-black font-headline tracking-tighter mt-2">{stats.workspaces}</p>
             </div>
-            <div className="w-16 h-16 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-              </svg>
+            <div className="w-14 h-14 bg-black/10 rounded-xl flex items-center justify-center backdrop-blur-md">
+              <span className="material-symbols-outlined text-3xl">database</span>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-100">
+        <div className="bg-surface-container-low border border-outline-variant/20 rounded-2xl p-6 shadow-lg group hover:border-secondary/30 transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm font-medium">Papers Saved</p>
-              <p className="text-4xl font-bold text-gray-800 mt-2">{stats.papers}</p>
+              <p className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">Papers Archive</p>
+              <p className="text-5xl font-black font-headline tracking-tighter text-on-surface mt-2 group-hover:text-secondary transition-colors">{stats.papers}</p>
             </div>
-            <div className="w-16 h-16 bg-cyan-100 rounded-xl flex items-center justify-center">
-              <svg className="w-8 h-8 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
+            <div className="w-14 h-14 bg-secondary/10 text-secondary rounded-xl flex items-center justify-center">
+              <span className="material-symbols-outlined text-3xl">auto_awesome</span>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-100">
+        <div className="bg-surface-container-low border border-outline-variant/20 rounded-2xl p-6 shadow-lg group hover:border-tertiary/30 transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm font-medium">AI Conversations</p>
-              <p className="text-4xl font-bold text-gray-800 mt-2">{stats.chats}</p>
+              <p className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">AI Synthesis</p>
+              <p className="text-5xl font-black font-headline tracking-tighter text-on-surface mt-2 group-hover:text-tertiary transition-colors">{stats.chats}</p>
             </div>
-            <div className="w-16 h-16 bg-teal-100 rounded-xl flex items-center justify-center">
-              <svg className="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-              </svg>
+            <div className="w-14 h-14 bg-tertiary/10 text-tertiary rounded-xl flex items-center justify-center">
+              <span className="material-symbols-outlined text-3xl">forum</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Recent Activity */}
-      <div className="bg-white rounded-2xl shadow-lg p-6">
-        <h3 className="text-2xl font-bold text-gray-800 mb-6">Recent Activity</h3>
+      <section className="bg-surface-container-low/40 border border-outline-variant/10 rounded-3xl p-8 backdrop-blur-sm">
+        <h3 className="font-label text-xs uppercase tracking-[0.2em] text-primary-dim font-bold mb-10">Neural Activity Stream</h3>
+        
         {recentActivity.length === 0 ? (
-          <div className="text-center py-12 text-gray-500">
-            <svg className="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            <p className="text-lg font-medium">No activity yet</p>
-            <p className="text-sm">Start by searching and importing papers!</p>
+          <div className="text-center py-16 text-on-surface-variant bg-surface-container-high/20 rounded-2xl border border-dashed border-outline-variant/30">
+            <span className="material-symbols-outlined text-5xl mb-4 opacity-20">history</span>
+            <p className="text-lg font-bold font-headline tracking-tight">No activity logs found</p>
+            <p className="text-sm font-label uppercase tracking-widest mt-2">Initialize your first research session</p>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-0">
             {recentActivity.map((activity, idx) => (
-              <div key={idx} className="flex items-start space-x-4 p-4 border-2 border-gray-100 rounded-xl hover:border-cyan-200 transition-all">
-                <div className="w-10 h-10 bg-cyan-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <p className="font-semibold text-gray-800">{activity.title}</p>
-                  <p className="text-sm text-gray-600">Workspace: {activity.workspace}</p>
-                  <p className="text-xs text-gray-500 mt-1">{activity.date}</p>
+              <div key={idx} className="relative pl-10 pb-8 group last:pb-0">
+                {/* Visual Timeline Path */}
+                <div className="absolute left-0 top-1.5 w-2 h-2 rounded-full bg-secondary shadow-[0_0_12px_rgba(83,221,252,0.8)] group-hover:scale-125 transition-transform"></div>
+                <div className="absolute left-[3px] top-4 w-[1px] h-full bg-outline-variant/30 group-last:bg-transparent"></div>
+
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 rounded-2xl bg-surface-container-high/0 hover:bg-surface-container-high/40 border border-transparent hover:border-outline-variant/10 transition-all duration-300">
+                  <div>
+                    <h4 className="text-lg font-bold text-on-surface group-hover:text-primary transition-colors leading-tight mb-1">{activity.title}</h4>
+                    <div className="flex items-center gap-3">
+                      <span className="text-[10px] font-label uppercase tracking-widest text-secondary font-bold">{activity.workspace}</span>
+                      <span className="h-1 w-1 rounded-full bg-outline-variant"></span>
+                      <span className="text-[10px] font-label uppercase tracking-widest text-on-surface-variant leading-none">{activity.type === 'paper' ? 'Knowledge Import' : 'Synthesis'}</span>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[10px] font-label text-on-surface-variant uppercase tracking-widest">{activity.date}</p>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         )}
-      </div>
+      </section>
     </div>
   );
 };

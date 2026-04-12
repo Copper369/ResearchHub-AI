@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './components/Home';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import SearchPapers from './components/SearchPapers';
 import Workspace from './components/Workspace';
 import Chatbot from './components/Chatbot';
+import Sidebar from './components/Sidebar';
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token'));
@@ -66,50 +67,21 @@ function App() {
 // Authenticated Layout Component
 const AuthenticatedLayout: React.FC<{ children: React.ReactNode; onLogout: () => void }> = ({ children, onLogout }) => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-teal-50 to-blue-50">
-      {/* Header */}
-      <nav className="bg-white shadow-md">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex justify-between items-center">
-            <Link to="/" className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-teal-600 rounded-lg flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-800">ResearchHub AI</h1>
-                <p className="text-xs text-gray-500">Intelligent Research Assistant</p>
-              </div>
-            </Link>
-            <div className="flex items-center space-x-6">
-              <Link to="/dashboard" className="text-gray-600 hover:text-cyan-600 font-medium transition-colors">
-                Dashboard
-              </Link>
-              <Link to="/search" className="text-gray-600 hover:text-cyan-600 font-medium transition-colors">
-                Search Papers
-              </Link>
-              <Link to="/workspace" className="text-gray-600 hover:text-cyan-600 font-medium transition-colors">
-                Workspaces
-              </Link>
-              <Link to="/chat" className="text-gray-600 hover:text-cyan-600 font-medium transition-colors">
-                AI Chat
-              </Link>
-              <button 
-                onClick={onLogout} 
-                className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-teal-600 text-white rounded-lg hover:from-cyan-600 hover:to-teal-700 transition-all shadow-md"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
+    <div className="dark bg-surface text-on-surface font-body h-screen w-full flex overflow-hidden relative">
+      <div className="noise-bg fixed inset-0 pointer-events-none"></div>
+      
+      {/* Sidebar Navigation */}
+      <Sidebar onLogout={onLogout} />
 
-      {/* Main Content */}
-      <div className="container mx-auto px-6 py-8">
-        {children}
-      </div>
+      {/* Main Content Workspace */}
+      <main className="flex-1 ml-64 overflow-y-auto custom-scrollbar relative">
+        {/* Intelligence Pulse line at the top of content area */}
+        <div className="intelligence-pulse sticky top-0 z-20"></div>
+        
+        <div className="p-12 max-w-7xl mx-auto">
+          {children}
+        </div>
+      </main>
     </div>
   );
 };

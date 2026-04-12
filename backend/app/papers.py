@@ -90,17 +90,18 @@ async def search_papers(query: str, current_user: User = Depends(get_current_use
                 for entry in entries:
                     try:
                         title_elem = entry.find('atom:title', ns)
-                        title = title_elem.text.strip().replace('\n', ' ') if title_elem is not None else "No title"
+                        title = title_elem.text.strip().replace('\n', ' ') if (title_elem is not None and title_elem.text) else "No title"
                         
                         author_elems = entry.findall('atom:author', ns)
-                        authors = ', '.join([
-                            author.find('atom:name', ns).text 
-                            for author in author_elems 
-                            if author.find('atom:name', ns) is not None
-                        ]) or "Unknown"
+                        author_names = []
+                        for author in author_elems:
+                            name_elem = author.find('atom:name', ns)
+                            if name_elem is not None and name_elem.text:
+                                author_names.append(name_elem.text)
+                        authors = ', '.join(author_names) or "Unknown"
                         
                         summary_elem = entry.find('atom:summary', ns)
-                        abstract = summary_elem.text.strip().replace('\n', ' ') if summary_elem is not None else "No abstract"
+                        abstract = summary_elem.text.strip().replace('\n', ' ') if (summary_elem is not None and summary_elem.text) else "No abstract"
                         
                         published_elem = entry.find('atom:published', ns)
                         date = published_elem.text[:10] if published_elem is not None else "Unknown"

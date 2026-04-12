@@ -1,39 +1,95 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import NeuralParticles from './NeuralParticles';
+import HeroCharacter from './HeroCharacter';
 
 interface HomeProps {
   isAuthenticated: boolean;
   onLogout: () => void;
 }
 
+const slides = [
+  {
+    title: "Intelligent Research Paper Management",
+    subtitle: "Discover, organize, and analyze academic research with AI-powered insights",
+    image: "https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=1200&h=600&fit=crop&q=80"
+  },
+  {
+    title: "AI-Powered Research Assistant",
+    subtitle: "Get instant answers and insights from your research papers using advanced AI",
+    image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200&h=600&fit=crop&q=80"
+  },
+  {
+    title: "Organize Your Research Efficiently",
+    subtitle: "Create workspaces, import papers, and keep your research perfectly organized",
+    image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200&h=600&fit=crop&q=80"
+  }
+];
+
 const Home: React.FC<HomeProps> = ({ isAuthenticated, onLogout }) => {
   const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  const slides = [
-    {
-      title: "Intelligent Research Paper Management",
-      subtitle: "Discover, organize, and analyze academic research with AI-powered insights",
-      image: "https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=1200&h=600&fit=crop&q=80"
-    },
-    {
-      title: "AI-Powered Research Assistant",
-      subtitle: "Get instant answers and insights from your research papers using advanced AI",
-      image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200&h=600&fit=crop&q=80"
-    },
-    {
-      title: "Organize Your Research Efficiently",
-      subtitle: "Create workspaces, import papers, and keep your research perfectly organized",
-      image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200&h=600&fit=crop&q=80"
-    }
-  ];
+  const [titleProgress, setTitleProgress] = useState(0);
+  const [subtitleProgress, setSubtitleProgress] = useState(0);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
+    }, 8000);
     return () => clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+    setTitleProgress(0);
+    setSubtitleProgress(0);
+    
+    const title = slides[currentSlide].title;
+    const subtitle = slides[currentSlide].subtitle;
+    
+    let tProgress = 0;
+    const titleTimer = setInterval(() => {
+      if (tProgress <= title.length) {
+        setTitleProgress(tProgress);
+        tProgress++;
+      } else {
+        clearInterval(titleTimer);
+        let sProgress = 0;
+        const subtitleTimer = setInterval(() => {
+          if (sProgress <= subtitle.length) {
+            setSubtitleProgress(sProgress);
+            sProgress++;
+          } else {
+            clearInterval(subtitleTimer);
+          }
+        }, 20);
+      }
+    }, 40);
+
+    return () => clearInterval(titleTimer);
+  }, [currentSlide]);
+
+  const renderTitle = () => {
+    const title = slides[currentSlide].title;
+    const words = title.split(' ');
+    let charCount = 0;
+
+    return words.map((word, i) => {
+      const start = charCount;
+      charCount += word.length + 1; // +1 for space
+
+      const visibleChars = Math.max(0, Math.min(word.length, titleProgress - start));
+      const wordText = word.substring(0, visibleChars);
+      
+      if (visibleChars === 0) return null;
+
+      return (
+        <span key={i} className={i % 2 === 1 ? 'text-primary mr-3' : 'text-on-surface mr-3'}>
+          {wordText}
+        </span>
+      );
+    });
+  };
 
   const goToSlide = (index: number) => {
     setCurrentSlide(index);
@@ -48,57 +104,44 @@ const Home: React.FC<HomeProps> = ({ isAuthenticated, onLogout }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-teal-50 to-blue-50">
+    <div className="dark min-h-screen bg-surface font-body overflow-x-hidden">
+      <div className="noise-bg fixed inset-0 pointer-events-none"></div>
+
       {/* Navbar */}
-      <nav className="bg-white shadow-md">
+      <nav className="fixed top-0 left-0 right-0 z-50 glass-panel border-b border-outline-variant/10">
         <div className="container mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-teal-600 rounded-lg flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
+            <Link to="/" className="flex items-center space-x-3 group">
+              <div className="w-10 h-10 bg-gradient-to-br from-primary-dim to-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-110 transition-transform">
+                <span className="material-symbols-outlined text-on-primary">psychology</span>
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-800">ResearchHub AI</h1>
-                <p className="text-xs text-gray-500">Intelligent Research Assistant</p>
+                <h1 className="text-xl font-black font-headline tracking-tighter text-on-surface uppercase leading-none">ResearchHub <span className="text-primary">AI</span></h1>
+                <p className="text-[10px] font-label font-bold uppercase tracking-widest text-on-surface-variant opacity-60">Neural Synthesis</p>
               </div>
-            </div>
-            <div className="flex items-center space-x-6">
-              <Link to="/" className="text-gray-600 hover:text-cyan-600 font-medium transition-colors">
-                Home
-              </Link>
+            </Link>
+            
+            <div className="hidden md:flex items-center space-x-10">
               {isAuthenticated ? (
                 <>
-                  <Link to="/dashboard" className="text-gray-600 hover:text-cyan-600 font-medium transition-colors">
-                    Dashboard
-                  </Link>
-                  <Link to="/search" className="text-gray-600 hover:text-cyan-600 font-medium transition-colors">
-                    Search
-                  </Link>
-                  <Link to="/workspace" className="text-gray-600 hover:text-cyan-600 font-medium transition-colors">
-                    Workspaces
-                  </Link>
-                  <Link to="/chat" className="text-gray-600 hover:text-cyan-600 font-medium transition-colors">
-                    AI Chat
-                  </Link>
+                  <Link to="/dashboard" className="text-[10px] font-label font-bold uppercase tracking-[0.2em] text-on-surface-variant hover:text-primary transition-all">Archive</Link>
+                  <Link to="/search" className="text-[10px] font-label font-bold uppercase tracking-[0.2em] text-on-surface-variant hover:text-primary transition-all">Synthesis</Link>
+                  <Link to="/workspace" className="text-[10px] font-label font-bold uppercase tracking-[0.2em] text-on-surface-variant hover:text-primary transition-all">Nodes</Link>
                   <button 
                     onClick={onLogout}
-                    className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-teal-600 text-white rounded-lg hover:from-cyan-600 hover:to-teal-700 transition-all shadow-md"
+                    className="px-6 py-2 bg-surface-container-highest border border-outline-variant/30 text-on-surface rounded-xl font-label text-[10px] font-bold uppercase tracking-widest hover:bg-surface-bright transition-all"
                   >
-                    Logout
+                    DISCONNECT
                   </button>
                 </>
               ) : (
                 <>
-                  <Link to="/login" className="text-gray-600 hover:text-cyan-600 font-medium transition-colors">
-                    Sign In
-                  </Link>
+                  <Link to="/login" className="text-[10px] font-label font-bold uppercase tracking-[0.2em] text-on-surface-variant hover:text-primary transition-all">Authorization</Link>
                   <Link 
                     to="/login"
-                    className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-teal-600 text-white rounded-lg hover:from-cyan-600 hover:to-teal-700 transition-all shadow-md"
+                    className="px-8 py-3 bg-gradient-to-r from-primary to-primary-dim text-on-primary rounded-xl font-black font-headline tracking-tighter uppercase shadow-xl shadow-primary/20 hover:scale-[1.05] active:scale-[0.98] transition-all"
                   >
-                    Get Started
+                    INITIALIZE ACCESS
                   </Link>
                 </>
               )}
@@ -106,214 +149,201 @@ const Home: React.FC<HomeProps> = ({ isAuthenticated, onLogout }) => {
           </div>
         </div>
       </nav>
-      {/* Hero Section with Slideshow */}
-      <div className="relative bg-gradient-to-br from-cyan-400 via-teal-500 to-blue-500 text-white overflow-hidden h-[600px]">
+
+      {/* Hero Section */}
+      <section className="relative min-h-screen flex items-center pt-20">
         {/* Slideshow Background */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 z-0">
+          <NeuralParticles />
           {slides.map((slide, index) => (
             <div
               key={index}
-              className={`absolute inset-0 transition-opacity duration-1000 ${
-                index === currentSlide ? 'opacity-100' : 'opacity-0'
-              }`}
+              className={`absolute inset-0 transition-opacity duration-[2000ms] ${
+                index === currentSlide ? 'opacity-30 scale-110' : 'opacity-0 scale-100'
+              } transition-transform duration-[10000ms] ease-linear`}
             >
               <img
                 src={slide.image}
                 alt={slide.title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover grayscale opacity-50"
               />
-              <div className="absolute inset-0 bg-gradient-to-br from-cyan-600 via-teal-600 to-blue-600 opacity-80"></div>
+              <div className="absolute inset-0 bg-gradient-to-b from-surface via-surface/80 to-surface"></div>
             </div>
           ))}
         </div>
 
-        {/* Overlay Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-20 w-64 h-64 bg-white rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 right-20 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-        </div>
-        
-        <div className="container mx-auto px-6 py-24 relative h-full flex items-center">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 animate-fade-in">
-              {slides[currentSlide].title}
-            </h1>
-            <p className="text-xl md:text-2xl mb-8 text-white text-opacity-90">
-              {slides[currentSlide].subtitle}
-            </p>
-            <Link
-              to={isAuthenticated ? "/dashboard" : "/login"}
-              className="inline-block px-8 py-4 bg-white text-cyan-600 rounded-xl font-semibold text-lg hover:bg-opacity-90 transition-all shadow-xl hover:scale-105 transform"
-            >
-              {isAuthenticated ? "Go to Dashboard" : "Get Started"}
-            </Link>
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <header className="mb-12">
+               <span className="inline-block px-4 py-1.5 bg-primary/10 border border-primary/20 rounded-full text-[10px] font-label font-bold text-primary uppercase tracking-[0.3em] mb-8">Next-Gen Cognitive Architecture</span>
+               <h1 className="text-5xl md:text-7xl lg:text-8xl font-black font-headline leading-[1.1] tracking-tighter text-on-surface mb-4 uppercase h-[3.8em] md:h-[3.2em] overflow-visible flex flex-wrap items-start content-start">
+                 {renderTitle()}
+                 <span className="w-1 md:w-2 h-[0.8em] bg-primary inline-block animate-pulse ml-2 align-middle"></span>
+               </h1>
+               <p className="text-lg md:text-xl font-body text-on-surface-variant max-w-2xl leading-relaxed mb-12 h-[3.5em] md:h-[2.5em] overflow-hidden">
+                 {slides[currentSlide].subtitle.substring(0, subtitleProgress)}
+               </p>
+               <div className="flex flex-col sm:flex-row gap-6">
+                 <Link
+                   to={isAuthenticated ? "/dashboard" : "/login"}
+                   className="px-12 py-5 bg-gradient-to-r from-primary to-primary-dim text-on-primary rounded-2xl font-black font-headline tracking-tighter text-xl uppercase shadow-2xl shadow-primary/30 hover:scale-[1.05] active:scale-[0.98] transition-all text-center"
+                 >
+                   {isAuthenticated ? "Enter Workspace" : "Begin Synthesis"}
+                 </Link>
+                 <button className="px-12 py-5 bg-surface-container-highest border border-outline-variant/30 text-on-surface rounded-2xl font-black font-headline tracking-tighter text-xl uppercase hover:bg-surface-bright transition-all">
+                   System Specs
+                 </button>
+               </div>
+            </header>
+
+            <div className="hidden lg:block">
+              <HeroCharacter />
+            </div>
           </div>
         </div>
 
-        {/* Carousel Dots */}
-        <div className="absolute bottom-8 left-0 right-0 flex justify-center space-x-3 z-10">
+        {/* Carousel Indicators */}
+        <div className="absolute right-12 top-1/2 -translate-y-1/2 flex flex-col gap-4 z-20">
           {slides.map((_, index) => (
             <button
               key={index}
               onClick={() => goToSlide(index)}
-              className={`w-3 h-3 rounded-full transition-all ${
+              className={`w-1 transition-all duration-500 rounded-full ${
                 index === currentSlide
-                  ? 'bg-white w-8'
-                  : 'bg-white bg-opacity-50 hover:bg-opacity-75'
+                  ? 'bg-primary h-12 shadow-[0_0_12px_rgba(167,165,255,0.8)]'
+                  : 'bg-outline-variant h-4 hover:bg-on-surface-variant'
               }`}
             />
           ))}
         </div>
-      </div>
+
+        {/* Floating Intelligence Element */}
+        <div className="absolute bottom-12 left-6 text-[10px] font-label font-bold text-on-surface-variant uppercase tracking-[0.4em] flex items-center gap-4">
+           <div className="w-12 h-[1px] bg-outline-variant"></div>
+           Neural Processing Layer v4.0.2 Active
+        </div>
+      </section>
 
       {/* Features Section */}
-      <div className="container mx-auto px-6 py-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Feature 1 - Search */}
-          <button
-            onClick={() => handleFeatureClick('/search')}
-            className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all text-center transform hover:scale-105 cursor-pointer"
-          >
-            <div className="w-20 h-20 bg-gradient-to-br from-cyan-100 to-teal-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <svg className="w-10 h-10 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-bold text-gray-800 mb-3">Smart Search</h3>
-            <p className="text-gray-600 mb-4">
-              Search millions of research papers from arXiv with intelligent filtering and recommendations
-            </p>
-            <span className="text-cyan-600 font-medium hover:text-cyan-700">
-              {isAuthenticated ? 'Go to Search →' : 'Learn more →'}
-            </span>
-          </button>
-
-          {/* Feature 2 - Organize */}
-          <button
-            onClick={() => handleFeatureClick('/workspace')}
-            className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all text-center transform hover:scale-105 cursor-pointer"
-          >
-            <div className="w-20 h-20 bg-gradient-to-br from-cyan-100 to-teal-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <svg className="w-10 h-10 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-bold text-gray-800 mb-3">Organize</h3>
-            <p className="text-gray-600 mb-4">
-              Create workspaces for different projects and keep your research organized and accessible
-            </p>
-            <span className="text-cyan-600 font-medium hover:text-cyan-700">
-              {isAuthenticated ? 'Go to Workspaces →' : 'Learn more →'}
-            </span>
-          </button>
-
-          {/* Feature 3 - AI Insights */}
-          <button
-            onClick={() => handleFeatureClick('/chat')}
-            className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all text-center transform hover:scale-105 cursor-pointer"
-          >
-            <div className="w-20 h-20 bg-gradient-to-br from-cyan-100 to-teal-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <svg className="w-10 h-10 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-bold text-gray-800 mb-3">AI Insights</h3>
-            <p className="text-gray-600 mb-4">
-              Chat with AI to get summaries, comparisons, and insights from your research papers
-            </p>
-            <span className="text-cyan-600 font-medium hover:text-cyan-700">
-              {isAuthenticated ? 'Go to AI Chat →' : 'Learn more →'}
-            </span>
-          </button>
-
-          {/* Feature 4 - Dashboard */}
-          <button
-            onClick={() => handleFeatureClick('/dashboard')}
-            className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all text-center transform hover:scale-105 cursor-pointer"
-          >
-            <div className="w-20 h-20 bg-gradient-to-br from-cyan-100 to-teal-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <svg className="w-10 h-10 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-bold text-gray-800 mb-3">Fast & Efficient</h3>
-            <p className="text-gray-600 mb-4">
-              Powered by Groq's Llama 3.3 70B for lightning-fast AI responses and analysis
-            </p>
-            <span className="text-cyan-600 font-medium hover:text-cyan-700">
-              {isAuthenticated ? 'Go to Dashboard →' : 'Learn more →'}
-            </span>
-          </button>
-        </div>
-      </div>
-
-      {/* Latest News Section */}
-      <div className="bg-white py-20">
+      <section className="py-32 bg-surface-container-low/20">
         <div className="container mx-auto px-6">
-          <h2 className="text-3xl font-bold text-gray-800 mb-12 text-center">How It Works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="group">
-              <div className="overflow-hidden rounded-2xl mb-4">
-                <img 
-                  src="https://images.unsplash.com/photo-1532619187608-e5375cab36aa?w=400&h=300&fit=crop" 
-                  alt="Search Papers"
-                  className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
-                />
+          <div className="mb-20 text-center">
+             <h2 className="text-[10px] font-label font-bold text-secondary uppercase tracking-[0.5em] mb-4">Core Cognitive Capabilities</h2>
+             <p className="text-5xl font-black font-headline text-on-surface tracking-tighter uppercase">Infinite Potential Retrieval</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* Feature 1 - Search */}
+            <button
+              onClick={() => handleFeatureClick('/search')}
+              className="group bg-surface-container-low border border-outline-variant/10 rounded-[2.5rem] p-10 hover:bg-surface-bright hover:border-primary/40 transition-all duration-500 text-left relative overflow-hidden"
+            >
+              <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 group-hover:bg-primary group-hover:text-on-primary transition-all duration-500">
+                <span className="material-symbols-outlined text-4xl">travel_explore</span>
               </div>
-              <h3 className="text-xl font-bold text-cyan-600 mb-2">Search & Discover</h3>
-              <p className="text-gray-600">
-                Search through millions of academic papers from arXiv and find exactly what you need
+              <h3 className="text-2xl font-black font-headline text-on-surface uppercase tracking-tighter mb-4">Neural Discovery</h3>
+              <p className="text-on-surface-variant font-body leading-relaxed mb-8 opacity-70">
+                Traverse millions of datasets with hyper-intelligent neural filtering and precision vector matching.
               </p>
-            </div>
+              <div className="flex items-center gap-2 text-primary font-label text-[10px] font-bold uppercase tracking-widest group-hover:translate-x-2 transition-transform">
+                ENGAGE SCANNER <span className="material-symbols-outlined text-xs">arrow_forward</span>
+              </div>
+              <div className="absolute -right-8 -bottom-8 w-32 h-32 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors"></div>
+            </button>
 
-            <div className="group">
-              <div className="overflow-hidden rounded-2xl mb-4">
-                <img 
-                  src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=300&fit=crop" 
-                  alt="Organize"
-                  className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
-                />
+            {/* Feature 2 - Organize */}
+            <button
+              onClick={() => handleFeatureClick('/workspace')}
+              className="group bg-surface-container-low border border-outline-variant/10 rounded-[2.5rem] p-10 hover:bg-surface-bright hover:border-tertiary/40 transition-all duration-500 text-left relative overflow-hidden"
+            >
+              <div className="w-16 h-16 bg-tertiary/10 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 group-hover:bg-tertiary group-hover:text-on-tertiary transition-all duration-500">
+                <span className="material-symbols-outlined text-4xl">hub</span>
               </div>
-              <h3 className="text-xl font-bold text-cyan-600 mb-2">Organize Projects</h3>
-              <p className="text-gray-600">
-                Create workspaces for different research topics and keep everything organized
+              <h3 className="text-2xl font-black font-headline text-on-surface uppercase tracking-tighter mb-4">Node Clusters</h3>
+              <p className="text-on-surface-variant font-body leading-relaxed mb-8 opacity-70">
+                Architect knowledge repositories for multithreaded research projects with seamless data persistence.
               </p>
-            </div>
+              <div className="flex items-center gap-2 text-tertiary font-label text-[10px] font-bold uppercase tracking-widest group-hover:translate-x-2 transition-transform">
+                OPEN REPOSITORIES <span className="material-symbols-outlined text-xs">arrow_forward</span>
+              </div>
+              <div className="absolute -right-8 -bottom-8 w-32 h-32 bg-tertiary/5 rounded-full blur-3xl group-hover:bg-tertiary/10 transition-colors"></div>
+            </button>
 
-            <div className="group">
-              <div className="overflow-hidden rounded-2xl mb-4">
-                <img 
-                  src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=300&fit=crop" 
-                  alt="AI Analysis"
-                  className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
-                />
+            {/* Feature 3 - AI Insights */}
+            <button
+              onClick={() => handleFeatureClick('/chat')}
+              className="group bg-surface-container-low border border-outline-variant/10 rounded-[2.5rem] p-10 hover:bg-surface-bright hover:border-secondary/40 transition-all duration-500 text-left relative overflow-hidden"
+            >
+              <div className="w-16 h-16 bg-secondary/10 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 group-hover:bg-secondary group-hover:text-on-secondary transition-all duration-500">
+                <span className="material-symbols-outlined text-4xl">psychology</span>
               </div>
-              <h3 className="text-xl font-bold text-cyan-600 mb-2">AI-Powered Analysis</h3>
-              <p className="text-gray-600">
-                Get instant insights, summaries, and answers from your research papers using AI
+              <h3 className="text-2xl font-black font-headline text-on-surface uppercase tracking-tighter mb-4">AI Linkage</h3>
+              <p className="text-on-surface-variant font-body leading-relaxed mb-8 opacity-70">
+                Bridge your cognition with advanced AI to extract summaries, correlations, and cross-domain insights.
               </p>
-            </div>
+              <div className="flex items-center gap-2 text-secondary font-label text-[10px] font-bold uppercase tracking-widest group-hover:translate-x-2 transition-transform">
+                BRIDGE CONNECTION <span className="material-symbols-outlined text-xs">arrow_forward</span>
+              </div>
+              <div className="absolute -right-8 -bottom-8 w-32 h-32 bg-secondary/5 rounded-full blur-3xl group-hover:bg-secondary/10 transition-colors"></div>
+            </button>
+
+            {/* Feature 4 - Processing */}
+            <button
+              onClick={() => handleFeatureClick('/dashboard')}
+              className="group bg-surface-container-low border border-outline-variant/10 rounded-[2.5rem] p-10 hover:bg-surface-bright hover:border-primary-dim/40 transition-all duration-500 text-left relative overflow-hidden"
+            >
+              <div className="w-16 h-16 bg-primary-dim/10 rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 group-hover:bg-primary-dim group-hover:text-on-primary transition-all duration-500">
+                <span className="material-symbols-outlined text-4xl">bolt</span>
+              </div>
+              <h3 className="text-2xl font-black font-headline text-on-surface uppercase tracking-tighter mb-4">Hyper Processing</h3>
+              <p className="text-on-surface-variant font-body leading-relaxed mb-8 opacity-70">
+                Accelerated by Llama 3.3 70B across distributed neural nodes for zero-latency intelligence.
+              </p>
+              <div className="flex items-center gap-2 text-primary-dim font-label text-[10px] font-bold uppercase tracking-widest group-hover:translate-x-2 transition-transform">
+                VIEW LATENCY <span className="material-symbols-outlined text-xs">arrow_forward</span>
+              </div>
+              <div className="absolute -right-8 -bottom-8 w-32 h-32 bg-primary-dim/5 rounded-full blur-3xl group-hover:bg-primary-dim/10 transition-colors"></div>
+            </button>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* CTA Section */}
-      <div className="bg-gradient-to-r from-cyan-500 to-teal-600 py-16">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Ready to Transform Your Research?
+      <section className="relative py-32 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-primary-dim/20 to-secondary/20 backdrop-blur-3xl"></div>
+        <div className="intelligence-pulse"></div>
+        
+        <div className="container mx-auto px-6 text-center relative z-10">
+          <h2 className="text-5xl md:text-7xl font-black font-headline tracking-tighter text-on-surface mb-6 uppercase">
+            Transform Your <span className="text-primary">Cognition</span>
           </h2>
-          <p className="text-xl text-white text-opacity-90 mb-8">
-            Join researchers worldwide using AI to accelerate their work
+          <p className="text-xl md:text-2xl font-body text-on-surface-variant max-w-3xl mx-auto mb-12 opacity-80 leading-relaxed">
+            Join the global neural network of elite researchers utilizing state-of-the-art AI to accelerate the future of science.
           </p>
-          <Link
-            to={isAuthenticated ? "/dashboard" : "/login"}
-            className="inline-block px-8 py-4 bg-white text-cyan-600 rounded-xl font-semibold text-lg hover:bg-opacity-90 transition-all shadow-xl"
-          >
-            {isAuthenticated ? "Go to Dashboard" : "Get Started Free"}
-          </Link>
+          <div className="flex flex-col sm:flex-row justify-center gap-6">
+            <Link
+              to={isAuthenticated ? "/dashboard" : "/login"}
+              className="px-12 py-5 bg-gradient-to-r from-primary to-primary-dim text-on-primary rounded-2xl font-black font-headline tracking-tighter text-xl uppercase shadow-2xl shadow-primary/30 hover:scale-[1.05] active:scale-[0.98] transition-all"
+            >
+              {isAuthenticated ? "Enter Dashboard" : "Get Started Now"}
+            </Link>
+          </div>
         </div>
-      </div>
+      </section>
+
+      {/* Footer Interface */}
+      <footer className="py-12 border-t border-outline-variant/10 bg-surface">
+         <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+            <div className="flex items-center gap-3 opacity-50">
+               <span className="material-symbols-outlined text-primary">psychology</span>
+               <span className="font-label text-[10px] font-bold uppercase tracking-[0.4em]">ResearchHub AI // Neural Operating System</span>
+            </div>
+            <div className="flex items-center gap-10">
+               <span className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">System Status: <span className="text-secondary">Nominal</span></span>
+               <span className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">© 2026 NS-TECH</span>
+            </div>
+         </div>
+      </footer>
     </div>
   );
 };

@@ -60,164 +60,172 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-cyan-400 via-teal-500 to-blue-500 relative overflow-hidden py-12">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-20 left-20 w-64 h-64 bg-white rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-      </div>
+    <div className="dark min-h-screen flex items-center justify-center bg-surface font-body p-6 relative overflow-hidden">
+      <div className="noise-bg fixed inset-0 pointer-events-none"></div>
+      
+      {/* Background Decorative Glows */}
+      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] pointer-events-none animate-pulse"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-secondary/5 rounded-full blur-[120px] pointer-events-none animate-pulse" style={{ animationDelay: '2s' }}></div>
 
-      <div className="relative bg-white p-10 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="text-center mb-8">
-          <div className="inline-block w-16 h-16 bg-gradient-to-br from-cyan-500 to-teal-600 rounded-xl flex items-center justify-center mb-4">
-            <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
+      <div className="relative bg-surface-container-low/60 backdrop-blur-2xl border border-outline-variant/20 p-8 sm:p-12 rounded-[2.5rem] shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto custom-scrollbar">
+        <div className="intelligence-pulse absolute top-0 left-0 w-full h-[2px]"></div>
+        
+        <div className="text-center mb-10">
+          <div className="inline-block w-20 h-20 bg-gradient-to-br from-primary-dim to-primary rounded-3xl flex items-center justify-center mb-6 shadow-2xl shadow-primary/20 rotate-3 hover:rotate-0 transition-transform duration-500">
+            <span className="material-symbols-outlined text-4xl text-on-primary">psychology</span>
           </div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-600 to-teal-600 bg-clip-text text-transparent mb-2">
-            ResearchHub AI
+          <h1 className="text-4xl font-black font-headline tracking-tighter text-on-surface mb-2 uppercase">
+            ResearchHub <span className="text-primary">AI</span>
           </h1>
-          <p className="text-gray-600">
-            {isRegister ? 'Create your account' : 'Welcome back'}
+          <p className="text-on-surface-variant font-label text-xs uppercase tracking-[0.3em] opacity-60">
+            {isRegister ? 'Initialize Neural Profile' : 'Access Intelligence Archive'}
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
           {isRegister && (
-            <>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Full Name *
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-2 border-b border-outline-variant/10 mb-6">
+              <div className="md:col-span-2">
+                <label className="block text-[10px] font-label font-bold uppercase tracking-widest text-on-surface-variant mb-2 ml-2">
+                  Full Name
                 </label>
                 <input
                   type="text"
-                  placeholder="Enter your full name"
+                  placeholder="Neural Identity"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="w-full p-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
+                  className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-2xl py-4 px-6 text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-body"
                   required={isRegister}
                   disabled={loading}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Email Address *
+                <label className="block text-[10px] font-label font-bold uppercase tracking-widest text-on-surface-variant mb-2 ml-2">
+                  Email Node
                 </label>
                 <input
                   type="email"
-                  placeholder="your.email@institution.edu"
+                  placeholder="name@domain.edu"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full p-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
+                  className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-2xl py-4 px-6 text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-body"
                   required={isRegister}
                   disabled={loading}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Phone Number *
+                <label className="block text-[10px] font-label font-bold uppercase tracking-widest text-on-surface-variant mb-2 ml-2">
+                  Comms Link
                 </label>
                 <input
                   type="tel"
-                  placeholder="+1 (555) 123-4567"
+                  placeholder="+X (XXX) XXX-XXXX"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full p-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
+                  className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-2xl py-4 px-6 text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-body"
                   required={isRegister}
                   disabled={loading}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Role / Position *
+                <label className="block text-[10px] font-label font-bold uppercase tracking-widest text-on-surface-variant mb-2 ml-2">
+                  Research Role
                 </label>
                 <select
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
-                  className="w-full p-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
+                  className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-2xl py-4 px-6 text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-body cursor-pointer"
                   required={isRegister}
                   disabled={loading}
                 >
-                  <option value="">Select your role</option>
-                  <option value="Undergraduate Student">Undergraduate Student</option>
-                  <option value="Graduate Student">Graduate Student</option>
-                  <option value="PhD Candidate">PhD Candidate</option>
-                  <option value="Postdoctoral Researcher">Postdoctoral Researcher</option>
-                  <option value="Research Assistant">Research Assistant</option>
-                  <option value="Assistant Professor">Assistant Professor</option>
-                  <option value="Associate Professor">Associate Professor</option>
-                  <option value="Professor">Professor</option>
-                  <option value="Research Scientist">Research Scientist</option>
-                  <option value="Industry Researcher">Industry Researcher</option>
-                  <option value="Independent Researcher">Independent Researcher</option>
-                  <option value="Other">Other</option>
+                  <option value="" className="bg-surface-container-highest">Select Access Level</option>
+                  <option value="Undergraduate Student" className="bg-surface-container-highest">Undergraduate Student</option>
+                  <option value="Graduate Student" className="bg-surface-container-highest">Graduate Student</option>
+                  <option value="PhD Candidate" className="bg-surface-container-highest">PhD Candidate</option>
+                  <option value="Postdoctoral Researcher" className="bg-surface-container-highest">Postdoctoral Researcher</option>
+                  <option value="Research Assistant" className="bg-surface-container-highest">Research Assistant</option>
+                  <option value="Assistant Professor" className="bg-surface-container-highest">Assistant Professor</option>
+                  <option value="Associate Professor" className="bg-surface-container-highest">Associate Professor</option>
+                  <option value="Professor" className="bg-surface-container-highest">Professor</option>
+                  <option value="Research Scientist" className="bg-surface-container-highest">Research Scientist</option>
+                  <option value="Industry Researcher" className="bg-surface-container-highest">Industry Researcher</option>
+                  <option value="Independent Researcher" className="bg-surface-container-highest">Independent Researcher</option>
+                  <option value="Other" className="bg-surface-container-highest">Other</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Institution / Organization *
+                <label className="block text-[10px] font-label font-bold uppercase tracking-widest text-on-surface-variant mb-2 ml-2">
+                  Institutional Hub
                 </label>
                 <input
                   type="text"
-                  placeholder="University or Organization name"
+                  placeholder="Organization name"
                   value={institution}
                   onChange={(e) => setInstitution(e.target.value)}
-                  className="w-full p-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
+                  className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-2xl py-4 px-6 text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-body"
                   required={isRegister}
                   disabled={loading}
                 />
               </div>
-            </>
+            </div>
           )}
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Username *
-            </label>
-            <input
-              type="text"
-              placeholder="Choose a username (min 3 chars)"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full p-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
-              required
-              minLength={3}
-              disabled={loading}
-            />
-          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-[10px] font-label font-bold uppercase tracking-widest text-on-surface-variant mb-2 ml-2">
+                Access ID
+              </label>
+              <input
+                type="text"
+                placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-2xl py-4 px-6 text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-body"
+                required
+                minLength={3}
+                disabled={loading}
+              />
+            </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Password *
-            </label>
-            <input
-              type="password"
-              placeholder="Create a password (min 6 chars)"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
-              required
-              minLength={6}
-              disabled={loading}
-            />
+            <div>
+              <label className="block text-[10px] font-label font-bold uppercase tracking-widest text-on-surface-variant mb-2 ml-2">
+                Cryptography
+              </label>
+              <input
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full bg-surface-container-highest border border-outline-variant/30 rounded-2xl py-4 px-6 text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-body"
+                required
+                minLength={6}
+                disabled={loading}
+              />
+            </div>
           </div>
 
           {error && (
-            <div className="bg-red-50 border-2 border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
-              {error}
+            <div className="bg-error-container/20 border border-error/30 text-error px-6 py-4 rounded-2xl flex items-center gap-3 animate-shake">
+              <span className="material-symbols-outlined text-xl">warning</span>
+              <span className="font-label text-xs uppercase tracking-widest">{error}</span>
             </div>
           )}
 
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-cyan-500 to-teal-600 text-white p-3 rounded-xl hover:from-cyan-600 hover:to-teal-700 transition-all font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-gradient-to-r from-primary to-primary-dim text-on-primary font-black font-headline tracking-tighter py-5 rounded-[1.25rem] shadow-2xl shadow-primary-dim/20 hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-50 disabled:grayscale uppercase"
             disabled={loading}
           >
-            {loading ? 'Please wait...' : (isRegister ? 'Create Account' : 'Sign In')}
+            {loading ? (
+              <div className="flex items-center justify-center gap-2">
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white/20 border-t-white"></div>
+                <span>Syncing Neural Link...</span>
+              </div>
+            ) : (isRegister ? 'INITIALIZE SYSTEM' : 'AUTHORIZE ACCESS')}
           </button>
         </form>
 
@@ -226,10 +234,10 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
             setIsRegister(!isRegister);
             setError('');
           }}
-          className="w-full mt-6 text-cyan-600 hover:text-cyan-700 font-medium transition-colors"
+          className="w-full mt-8 text-on-surface-variant font-label text-[10px] uppercase tracking-[0.2em] hover:text-primary transition-colors font-bold"
           disabled={loading}
         >
-          {isRegister ? 'Already have an account? Sign In' : "Don't have an account? Create One"}
+          {isRegister ? '← SWITCH TO SECURE SIGN IN' : 'INITIALIZE NEW SUBSPACE →'}
         </button>
       </div>
     </div>
