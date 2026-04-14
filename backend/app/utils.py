@@ -1,12 +1,20 @@
 from groq import Groq
-from sentence_transformers import SentenceTransformer
 import os
 from dotenv import load_dotenv
 
 load_dotenv(override=False)
 
 groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
+
+# Lazy load the embedding model - don't load on startup
+_embedding_model = None
+
+def get_embedding_model():
+    global _embedding_model
+    if _embedding_model is None:
+        from sentence_transformers import SentenceTransformer
+        _embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
+    return _embedding_model
 
 def get_groq_response(messages, temperature=0.3):
     response = groq_client.chat.completions.create(
@@ -18,4 +26,4 @@ def get_groq_response(messages, temperature=0.3):
     return response.choices[0].message.content
 
 def generate_embedding(text):
-    return embedding_model.encode(text).tolist()
+    return get_embedding_model().encode(text).tolist()
