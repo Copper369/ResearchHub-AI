@@ -5,7 +5,7 @@ from datetime import datetime
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(override=False)  # don't override vars already set in environment
 
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./researchhub.db")
 engine = create_engine(DATABASE_URL)

@@ -9,7 +9,7 @@ import hashlib
 from dotenv import load_dotenv
 from .database import get_db, User
 
-load_dotenv()
+load_dotenv(override=False)
 
 SECRET_KEY = os.getenv("SECRET_KEY", "default-secret-key")
 ALGORITHM = "HS256"

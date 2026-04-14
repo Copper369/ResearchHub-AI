@@ -3,7 +3,7 @@ from sentence_transformers import SentenceTransformer
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(override=False)
 
 groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
