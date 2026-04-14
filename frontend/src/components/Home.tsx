@@ -10,7 +10,7 @@ interface HomeProps {
 
 const slides = [
   {
-    title: "Intelligent Research Paper Management",
+    title: "Intelligent Paper Management",
     subtitle: "Discover, organize, and analyze academic research with AI-powered insights",
     image: "https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=1200&h=600&fit=crop&q=80"
   },
@@ -20,7 +20,7 @@ const slides = [
     image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200&h=600&fit=crop&q=80"
   },
   {
-    title: "Organize Your Research Efficiently",
+    title: "Organize Research Efficiently",
     subtitle: "Create workspaces, import papers, and keep your research perfectly organized",
     image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200&h=600&fit=crop&q=80"
   }
@@ -174,23 +174,23 @@ const Home: React.FC<HomeProps> = ({ isAuthenticated, onLogout }) => {
 
         <div className="container mx-auto px-6 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <header className="mb-12">
-               <span className="inline-block px-4 py-1.5 bg-primary/10 border border-primary/20 rounded-full text-[10px] font-label font-bold text-primary uppercase tracking-[0.3em] mb-8">Next-Gen Cognitive Architecture</span>
-               <h1 className="text-5xl md:text-7xl lg:text-8xl font-black font-headline leading-[1.1] tracking-tighter text-on-surface mb-6 uppercase min-h-[3.8em] md:min-h-[3.2em] flex flex-wrap items-start content-start">
+            <header className="mb-8">
+               <span className="inline-block px-4 py-1.5 bg-primary/10 border border-primary/20 rounded-full text-[10px] font-label font-bold text-primary uppercase tracking-[0.3em] mb-6">Next-Gen Cognitive Architecture</span>
+               <h1 className="text-4xl md:text-5xl lg:text-6xl font-black font-headline leading-[1.1] tracking-tighter text-on-surface mb-4 uppercase min-h-[4em] md:min-h-[3.5em] flex flex-wrap items-start content-start">
                  {renderTitle()}
-                 <span className="w-1 md:w-2 h-[0.8em] bg-primary inline-block animate-pulse ml-2 self-center"></span>
+                 <span className="w-1 h-[0.8em] bg-primary inline-block animate-pulse ml-2 self-center"></span>
                </h1>
-               <p className="text-lg md:text-xl font-body text-on-surface-variant max-w-2xl leading-relaxed mb-12 min-h-[3.5em] md:min-h-[2.5em]">
+               <p className="text-base md:text-lg font-body text-on-surface-variant max-w-xl leading-relaxed mb-8 min-h-[3em] md:min-h-[2.5em]">
                  {slides[currentSlide].subtitle.substring(0, subtitleProgress)}
                </p>
-               <div className="flex flex-col sm:flex-row gap-6">
+               <div className="flex flex-col sm:flex-row gap-4">
                  <Link
                    to={isAuthenticated ? "/dashboard" : "/login"}
-                   className="px-12 py-5 bg-gradient-to-r from-primary to-primary-dim text-on-primary rounded-2xl font-black font-headline tracking-tighter text-xl uppercase shadow-2xl shadow-primary/30 hover:scale-[1.05] active:scale-[0.98] transition-all text-center"
+                   className="px-8 py-4 bg-gradient-to-r from-primary to-primary-dim text-on-primary rounded-2xl font-black font-headline tracking-tighter text-base uppercase shadow-2xl shadow-primary/30 hover:scale-[1.05] active:scale-[0.98] transition-all text-center"
                  >
                    {isAuthenticated ? "Enter Workspace" : "Begin Synthesis"}
                  </Link>
-                 <button className="px-12 py-5 bg-surface-container-highest border border-outline-variant/30 text-on-surface rounded-2xl font-black font-headline tracking-tighter text-xl uppercase hover:bg-surface-bright transition-all">
+                 <button className="px-8 py-4 bg-surface-container-highest border border-outline-variant/30 text-on-surface rounded-2xl font-black font-headline tracking-tighter text-base uppercase hover:bg-surface-bright transition-all">
                    System Specs
                  </button>
                </div>
